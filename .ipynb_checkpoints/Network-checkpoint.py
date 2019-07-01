@@ -1,0 +1,53 @@
+import torch
+import pandas as pd
+import numpy as np
+import torchvision
+from torchvision import transforms
+import torch.nn.functional as F
+from torch.utils.data import DataLoader, Dataset
+
+import torch.nn as nn
+import torch.nn.functional as F
+
+class Network(nn.Module):
+    def __init__(self):
+        super(Network, self).__init__()
+        # Convolutional transformations
+        # Zorg dat het aantal out_channels meer en meer wordt
+        self.conv1 = nn.Conv2d(in_channels = 3, out_channels = 6, kernel_size = 5, stride = 1, padding = 0)
+        self.conv2 = nn.Conv2d(in_channels = 6, out_channels = 12, kernel_size = 5, stride = 1, padding = 0)
+        
+        # Fully Connected layers
+        # Zorg dat het aantal out_features minder en minder wordt
+        self.fc1 = nn.Linear(in_features = 12*10*10, out_features = 120)
+        self.fc2 = nn.Linear(in_features = 120, out_features = 60)
+        self.out = nn.Linear(in_features = 60, out_features = 1)
+        
+    def forward(self, t):
+        # Implementation of layers
+        # (1) input layer
+        t = t
+        
+        # (2) hidden conv layer 1
+        t = F.relu(self.conv1(t))
+        t = F.max_pool2d(t, kernel_size = 2, stride = 2)
+        
+        # (3) hidden conv layer 2
+        t = F.relu(self.conv2(t))
+        t = F.max_pool2d(t, kernel_size = 2, stride = 2)
+        
+        # (4) hidden linear layer 1
+        t = t.reshape(-1, 12*4*4)
+        t = self.fc1(t)
+        t = F.relu(t)
+        
+        # (5) hidden linear layer 2
+        t = self.fc2(t)
+        t = F.relu(t)
+        
+        # (6) output linear layer
+        t = self.out(t)
+        # Normaal zou je bij de output layer een softmax uitvoeren na een serie van relu operaties
+        # De loss/cost functie die we gaan toepassen maakt al impliciet gebruik van de softmax 
+        #t = F.softmax(t, dim = 1)             
+        return t
