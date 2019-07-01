@@ -19,9 +19,9 @@ class Network(nn.Module):
         
         # Fully Connected layers
         # Zorg dat het aantal out_features minder en minder wordt
-        self.fc1 = nn.Linear(in_features = 12*10*10, out_features = 120)
+        self.fc1 = nn.Linear(in_features = 12*9*9, out_features = 120)
         self.fc2 = nn.Linear(in_features = 120, out_features = 60)
-        self.out = nn.Linear(in_features = 60, out_features = 1)
+        self.out = nn.Linear(in_features = 60, out_features = 2)
         
     def forward(self, t):
         # Implementation of layers
@@ -38,7 +38,7 @@ class Network(nn.Module):
         t = F.max_pool2d(t, kernel_size = 2, stride = 2)
         
         # (4) hidden linear layer 1
-        t = t.reshape(-1, 12*4*4)
+        t = t.reshape(-1, 12*9*9)
         t = self.fc1(t)
         t = F.relu(t)
         

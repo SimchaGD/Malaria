@@ -8,6 +8,8 @@ from torch.utils.data import DataLoader, Dataset
 import matplotlib.pyplot as plt
 from skimage.transform import resize
 
+def GetNumCorrect(pred, labels):
+    return pred.argmax(dim = 1).eq(labels).sum()
 
 class DataMalaria(Dataset):
     def __init__(self, filepath, transform = None):
