@@ -44,12 +44,15 @@ class DataMalaria(Dataset):
             
         return image.double(), label
     
-    def imshowsingle(self, index):
-        image, label = self[0]
-        c, h, w = image.shape
-        plt.imshow(torch.transpose(image, -3, 2))
-        plt.title("label: {}".format(label))
-        plt.show()
+    def imshowsingle(self, index, ax = None):
+        image, label = self[index]
+        if ax == None:
+            plt.imshow(torch.transpose(image, -3, 2))
+            plt.title("label: {}".format(label))
+            plt.show()
+        else:
+            ax.imshow(torch.transpose(image, -3, 2))
+            
         
     def trainTestSplit(self, p = 0.25):
         self.train, self.test = train_test_split(self.data, test_size = p)
