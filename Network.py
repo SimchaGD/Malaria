@@ -23,6 +23,11 @@ class Network(nn.Module):
         self.fc2 = nn.Linear(in_features = 120, out_features = 60)
         self.out = nn.Linear(in_features = 60, out_features = 2)
         
+        # Dropout layers
+        # Helpt bij het filteren van onnodige features. Dit zorgt voor een robuster model.
+        self.drop1 = nn.Dropout(p = 0.3)
+        self.drop2 = nn.Dropout(p = 0.3)
+        
     def forward(self, t):
         # Implementation of layers
         # (1) input layer
@@ -30,19 +35,22 @@ class Network(nn.Module):
         
         # (2) hidden conv layer 1
         t = self.conv1(t)
-        t = F.relu(t)
         t = F.max_pool2d(t, kernel_size = 2, stride = 2)
+        t = F.relu(t)
         
         # (3) hidden conv layer 2
-        t = F.relu(self.conv2(t))
+        t = self.conv2(t)
         t = F.max_pool2d(t, kernel_size = 2, stride = 2)
+        t = F.relu(t)
         
         # (4) hidden linear layer 1
         t = t.reshape(-1, 12*9*9)
+        t = self.drop1(t)
         t = self.fc1(t)
         t = F.relu(t)
         
         # (5) hidden linear layer 2
+        t = self.drop2(t)
         t = self.fc2(t)
         t = F.relu(t)
         
