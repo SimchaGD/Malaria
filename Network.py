@@ -14,19 +14,15 @@ class Network(nn.Module):
         super(Network, self).__init__()
         # Convolutional transformations
         # Zorg dat het aantal out_channels meer en meer wordt
-        self.conv1 = nn.Conv2d(in_channels = 3, out_channels = 6, kernel_size = 5, stride = 1, padding = 0)
-        self.conv2 = nn.Conv2d(in_channels = 6, out_channels = 12, kernel_size = 5, stride = 1, padding = 0)
+        self.conv1 = nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 5, stride = 1, padding = 0)
+        self.conv2 = nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5, stride = 1, padding = 0)
         
         # Fully Connected layers
         # Zorg dat het aantal out_features minder en minder wordt
-        self.fc1 = nn.Linear(in_features = 12*9*9, out_features = 120)
+        self.fc1Input = 64*9*9
+        self.fc1 = nn.Linear(in_features = self.fc1Input, out_features = 120)
         self.fc2 = nn.Linear(in_features = 120, out_features = 60)
         self.out = nn.Linear(in_features = 60, out_features = 2)
-        
-        # Dropout layers
-        # Helpt bij het filteren van onnodige features. Dit zorgt voor een robuster model.
-        self.drop1 = nn.Dropout(p = 0.3)
-        self.drop2 = nn.Dropout(p = 0.3)
         
     def forward(self, t):
         # Implementation of layers
@@ -44,13 +40,11 @@ class Network(nn.Module):
         t = F.relu(t)
         
         # (4) hidden linear layer 1
-        t = t.reshape(-1, 12*9*9)
-        t = self.drop1(t)
+        t = t.reshape(-1, self.fc1Input)
         t = self.fc1(t)
         t = F.relu(t)
         
         # (5) hidden linear layer 2
-        t = self.drop2(t)
         t = self.fc2(t)
         t = F.relu(t)
         

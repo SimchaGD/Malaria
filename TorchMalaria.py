@@ -37,7 +37,7 @@ class DataMalaria(Dataset):
         label = self.data.iloc[index, 1]
         image = plt.imread("data/{}/{}".format(label, imname))
         
-        image = resize(image, [50, 50], anti_aliasing=True)
+        image = resize(image, [50, 50], anti_aliasing=True, mode = "reflect")
         
         if self.transform is not None:
             image = self.transform(image)
@@ -55,7 +55,7 @@ class DataMalaria(Dataset):
             
         
     def trainTestSplit(self, p = 0.25):
-        self.train, self.test = train_test_split(self.data, test_size = p)
+        self.train, self.test = train_test_split(self.data, test_size = p, random_state = 1)
         
     def testmode(self):
         self.data = self.test
