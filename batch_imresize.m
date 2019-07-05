@@ -18,6 +18,6 @@ function results = batch_imresize(im)
 
 % Replace the sample below with your code----------------------------------
 
-results = imresize(im);
+results = imresize(im, [50, 50]);
 
 %--------------------------------------------------------------------------
