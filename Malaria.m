@@ -3,7 +3,7 @@
 % Dataset: https://ceb.nlm.nih.gov/repositories/malaria-datasets/
 
 clr
-filepath = strcat(pwd, "\data");
+filepath = strcat(pwd, "\data_edited");
 imds = imageDatastore(filepath, 'IncludeSubfolders',true,'LabelSource','foldernames');
 %%
 labelCount = countEachLabel(imds);
