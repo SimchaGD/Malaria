@@ -35,9 +35,7 @@ class DataMalaria(Dataset):
     def __getitem__(self, index):
         imname = self.data.iloc[index, 0]
         label = self.data.iloc[index, 1]
-        image = plt.imread("data/{}/{}".format(label, imname))
-        
-        image = resize(image, [50, 50], anti_aliasing=True, mode = "reflect")
+        image = plt.imread("data_edited/{}/{}".format(label, imname))
         
         if self.transform is not None:
             image = self.transform(image)
