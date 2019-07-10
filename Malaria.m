@@ -21,37 +21,19 @@ numberOfLabels = length(unique(imds.Labels));
 %% Training Setup
 % Create train and test set
 
-% trainingSize = 0.75;
-% 
-% rng(1)
-% [trainData, testData] = splitEachLabel(imds, trainingSize, 'randomize');
-% 
-% % % Define Layers
-% inputLayer = imageInputLayer([imSize]);
-% 
-% middleLayers = [
-%                 convolution2dLayer(5, 6)
-%                 maxPooling2dLayer(2, 'Stride', 2)
-%                 reluLayer
-%                 
-%                 convolution2dLayer(5, 12)
-%                 maxPooling2dLayer(2, 'Stride', 2)
-%                 reluLayer
-%                 ];
-%             
-% finalLayers = [
-%                 fullyConnectedLayer(120)
-%                 reluLayer
-%                 fullyConnectedLayer(numberOfLabels)
-%                 softmaxLayer
-%                 classificationLayer()];
-% layers = [inputLayer
-%           middleLayers 
-%           finalLayers];
-% 
-% % Training  Options
-% options = trainingOptions('sgdm', 'MaxEpochs', 5, 'InitialLearnRate', 0.001);
-% CNN = trainNetwork(trainData, layers, options);
+trainingSize = 0.75;
+
+rng(1)
+[trainData, testData] = splitEachLabel(imds, trainingSize, 'randomize');
+
+% % Define Layers
+load("network_layers.mat")
+deepNetworkDesigner
+
+%%
+% Training  Options
+options = trainingOptions('sgdm', 'MaxEpochs', 5, 'InitialLearnRate', 0.001);
+CNN = trainNetwork(trainData, layers, options);
 % save('malariaCNN.mat', 'CNN')
 
 %%
